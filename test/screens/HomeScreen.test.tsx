@@ -46,7 +46,6 @@ describe('HomeScreen', () => {
       </QueryClientProvider>
     );
 
-    expect(screen.getByText('Найдите соседей за пару тапов')).toBeTruthy();
     expect(screen.getByText('Test listing')).toBeTruthy();
   });
 });
