@@ -19,11 +19,11 @@ export const useMatches = () =>
       if (error) throw error;
       return (data ?? []).map((item) => ({
         id: item.id,
-        compatibility_index: item.compatibility_index,
+        compatibility_index: item.compatibility_index ?? 0,
         listing: {
-          ...item.listings,
+          ...(item.listings ?? {}),
           images: item.listings?.images ?? []
         } as Listing
-      }));
+      })) as Match[];
     }
   });

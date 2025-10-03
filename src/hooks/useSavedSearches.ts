@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 
 type SavedSearch = {
   id: string;
-  query_json: any;
+  query_json: unknown;
 };
 
 export const useSavedSearches = () =>
@@ -15,6 +15,6 @@ export const useSavedSearches = () =>
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw error;
-      return data as SavedSearch[];
+      return (data ?? []) as SavedSearch[];
     }
   });

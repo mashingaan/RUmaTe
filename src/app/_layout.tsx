@@ -1,7 +1,6 @@
 import React from 'react';
 import { Slot } from 'expo-router';
 import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query';
-import { AppStateStatus, Platform } from 'react-native';
 import { useOnlineManager } from '@/hooks/useOnlineManager';
 import { useAppState } from '@/hooks/useAppState';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';

@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { Animated, Easing, View } from 'react-native';
+import { Animated, Easing, StyleProp, ViewStyle } from 'react-native';
 
 interface SkeletonProps {
   height?: number;
   width?: number | string;
   radius?: number;
-  style?: any;
+  style?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
 }
 
 export const Skeleton: React.FC<SkeletonProps> = ({ height = 16, width = '100%', radius = 12, style }) => {

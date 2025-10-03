@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Alert, FlatList, Pressable, Text, TextInput, View } from 'react-native';
+import { Alert, FlatList, ListRenderItem, Pressable, Text, TextInput, View } from 'react-native';
 import { useListings } from '@/hooks/useListings';
 import { useSearchStore } from '@/store/useSearchStore';
 import { ListingCard } from '@/components/ListingCard';
@@ -8,16 +8,17 @@ import { Chip } from '@/components/Chip';
 import { EmptyState } from '@/components/EmptyState';
 import { Skeleton } from '@/components/Skeleton';
 import { useAuth } from '@/hooks/useAuth';
+import type { Listing } from '@/types/listing';
 import { colors } from '@/constants/theme';
 import { Plus } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 
 const filterChips = [
-  { key: 'budget', label: 'Бюджет' },
-  { key: 'commute', label: 'До кампуса' },
-  { key: 'furnished', label: 'Мебель' },
-  { key: 'pets', label: 'Животные' },
-  { key: 'smoking', label: 'Курение' }
+  { key: 'budget', label: 'Р‘СЋРґР¶РµС‚' },
+  { key: 'commute', label: 'Р”Рѕ РєР°РјРїСѓСЃР°' },
+  { key: 'furnished', label: 'РњРµР±РµР»СЊ' },
+  { key: 'pets', label: 'Р–РёРІРѕС‚РЅС‹Рµ' },
+  { key: 'smoking', label: 'РљСѓСЂРµРЅРёРµ' }
 ];
 
 export default function HomeScreen() {
@@ -31,24 +32,24 @@ export default function HomeScreen() {
     return isAuthenticated ? data : data.slice(0, 5);
   }, [data, isAuthenticated]);
 
-  const handleContact = (listing: any) => {
+  const handleContact = (_listing: Listing) => {
     if (!isAuthenticated) {
-      Alert.alert('Требуется вход', 'Войдите, чтобы связаться с хозяином.');
+      Alert.alert('РўСЂРµР±СѓРµС‚СЃСЏ РІС…РѕРґ', 'Р’РѕР№РґРёС‚Рµ, С‡С‚РѕР±С‹ СЃРІСЏР·Р°С‚СЊСЃСЏ СЃ С…РѕР·СЏРёРЅРѕРј.');
       return;
     }
     router.push('/(tabs)/messages');
   };
 
-  const renderItem = ({ item }: any) => (
+  const renderItem: ListRenderItem<Listing> = ({ item }) => (
     <ListingCard listing={item} onContact={() => handleContact(item)} />
   );
 
   return (
     <View className="flex-1 bg-bg">
       <View className="px-4 pt-4 pb-3 gap-3">
-        <Text className="text-2xl font-semibold text-text">Найдите соседей за пару тапов</Text>
+        <Text className="text-2xl font-semibold text-text">РќР°Р№РґРёС‚Рµ СЃРѕСЃРµРґРµР№ Р·Р° РїР°СЂСѓ С‚Р°РїРѕРІ</Text>
         <TextInput
-          placeholder="Поиск по адресу или району"
+          placeholder="РџРѕРёСЃРє РїРѕ Р°РґСЂРµСЃСѓ РёР»Рё СЂР°Р№РѕРЅСѓ"
           value={query}
           onChangeText={setQuery}
           className="bg-surface border border-border rounded-2xl px-4 py-3 text-base"
@@ -62,9 +63,9 @@ export default function HomeScreen() {
       </View>
       {isError && (
         <EmptyState
-          title="Не удалось загрузить объявления"
-          description="Проверьте подключение к сети и попробуйте снова"
-          actionLabel="Повторить"
+          title="РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РѕР±СЉСЏРІР»РµРЅРёСЏ"
+          description="РџСЂРѕРІРµСЂСЊС‚Рµ РїРѕРґРєР»СЋС‡РµРЅРёРµ Рє СЃРµС‚Рё Рё РїРѕРїСЂРѕР±СѓР№С‚Рµ СЃРЅРѕРІР°"
+          actionLabel="РџРѕРІС‚РѕСЂРёС‚СЊ"
           onActionPress={() => void refetch()}
         />
       )}
@@ -83,9 +84,9 @@ export default function HomeScreen() {
           contentContainerStyle={{ padding: 16, gap: 16, paddingBottom: 240 }}
           ListEmptyComponent={
             <EmptyState
-              title="Пока пусто"
-              description="Попробуйте изменить фильтры или опубликуйте свою комнату"
-              actionLabel="Создать объявление"
+              title="РџРѕРєР° РїСѓСЃС‚Рѕ"
+              description="РџРѕРїСЂРѕР±СѓР№С‚Рµ РёР·РјРµРЅРёС‚СЊ С„РёР»СЊС‚СЂС‹ РёР»Рё РѕРїСѓР±Р»РёРєСѓР№С‚Рµ СЃРІРѕСЋ РєРѕРјРЅР°С‚Сѓ"
+              actionLabel="РЎРѕР·РґР°С‚СЊ РѕР±СЉСЏРІР»РµРЅРёРµ"
               onActionPress={() => {}}
             />
           }

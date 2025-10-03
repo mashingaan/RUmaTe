@@ -5,17 +5,33 @@ import { useSearchStore } from '@/store/useSearchStore';
 
 const LISTINGS_KEY = ['listings'];
 
-const mapListing = (payload: any): Listing => ({
+type ListingRow = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  address: string;
+  lat: number | null;
+  lng: number | null;
+  minutes_to_campus: number | null;
+  roommates_count: number | null;
+  features: Record<string, unknown> | null;
+  compatibility_index: number | null;
+  images: string[] | null;
+  owner_id: string;
+};
+
+const mapListing = (payload: ListingRow): Listing => ({
   id: payload.id,
   title: payload.title,
   description: payload.description,
   price: payload.price,
   address: payload.address,
-  lat: payload.lat,
-  lng: payload.lng,
-  minutes_to_campus: payload.minutes_to_campus,
+  lat: payload.lat ?? 0,
+  lng: payload.lng ?? 0,
+  minutes_to_campus: payload.minutes_to_campus ?? 0,
   roommates_count: payload.roommates_count ?? 0,
-  features: payload.features ?? {},
+  features: (payload.features ?? {}) as Listing['features'],
   compatibility_index: payload.compatibility_index ?? 0,
   images: payload.images ?? [],
   owner_id: payload.owner_id
@@ -61,3 +77,4 @@ export const useToggleSaveSearch = () => {
     }
   });
 };
+

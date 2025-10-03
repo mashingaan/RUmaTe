@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import type { PublishConditionsForm, PublishDetailsForm } from '@/lib/validation';
-import { colors } from '@/constants/theme';
 
 interface ListingPreviewProps {
   details?: Partial<PublishDetailsForm>;
@@ -11,23 +10,24 @@ interface ListingPreviewProps {
 
 export const ListingPreview: React.FC<ListingPreviewProps> = ({ details, conditions, images }) => (
   <View className="bg-surface border border-border rounded-3xl p-4 gap-3">
-    <Text className="text-lg font-semibold text-text">Превью карточки</Text>
+    <Text className="text-lg font-semibold text-text">РџСЂРµРІСЊСЋ РєР°СЂС‚РѕС‡РєРё</Text>
     <Text className="text-2xl font-semibold text-text">
-      {details?.price ? `${details.price.toLocaleString()} ₽` : 'Цена'}
+      {details?.price ? `${details.price.toLocaleString()} в‚Ѕ` : 'Р¦РµРЅР°'}
     </Text>
     <Text className="text-base text-text" numberOfLines={2}>
-      {details?.title ?? 'Название комнаты'}
+      {details?.title ?? 'РќР°Р·РІР°РЅРёРµ РєРѕРјРЅР°С‚С‹'}
     </Text>
     <Text className="text-sm text-text-muted" numberOfLines={3}>
-      {details?.description ?? 'Описание появится здесь'}
+      {details?.description ?? 'РћРїРёСЃР°РЅРёРµ РїРѕСЏРІРёС‚СЃСЏ Р·РґРµСЃСЊ'}
     </Text>
     <Text className="text-sm text-text-muted">
-      {conditions?.furnished ? 'С мебелью • ' : ''}
-      {conditions?.petsAllowed ? 'Можно с животными • ' : ''}
-      {conditions?.smokingAllowed ? 'Можно курить' : 'Без курения'}
+      {conditions?.furnished ? 'РЎ РјРµР±РµР»СЊСЋ вЂў ' : ''}
+      {conditions?.petsAllowed ? 'РњРѕР¶РЅРѕ СЃ Р¶РёРІРѕС‚РЅС‹РјРё вЂў ' : ''}
+      {conditions?.smokingAllowed ? 'РњРѕР¶РЅРѕ РєСѓСЂРёС‚СЊ' : 'Р‘РµР· РєСѓСЂРµРЅРёСЏ'}
     </Text>
     <Text className="text-xs text-text-muted">
-      Фото: {images?.length ? `${images.length} шт.` : 'не добавлены'}
+      Р¤РѕС‚Рѕ: {images?.length ? `${images.length} С€С‚.` : 'РЅРµ РґРѕР±Р°РІР»РµРЅС‹'}
     </Text>
   </View>
 );
+
