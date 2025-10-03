@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { House, MessageCircle, Sparkles } from 'lucide-react-native';
+import { Home, MessageCircle, Sparkles } from 'lucide-react-native';
 import { colors } from '@/constants/theme';
 
 export default function TabsLayout() {
@@ -17,7 +17,7 @@ export default function TabsLayout() {
         name="home"
         options={{
           title: 'Лента',
-          tabBarIcon: ({ color }) => <House color={color} size={22} />
+          tabBarIcon: ({ color }) => <Home color={color} size={22} />
         }}
       />
       <Tabs.Screen

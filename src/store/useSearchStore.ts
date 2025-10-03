@@ -1,6 +1,7 @@
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 type FilterState = {
   budgetRange: [number, number];
@@ -37,11 +38,7 @@ export const useSearchStore = create<SearchState>()(
     }),
     {
       name: 'search-store',
-      storage: {
-        getItem: AsyncStorage.getItem,
-        setItem: (name, value) => AsyncStorage.setItem(name, value ?? ''),
-        removeItem: AsyncStorage.removeItem
-      }
+      storage: createJSONStorage(() => AsyncStorage)
     }
   )
 );

@@ -8,6 +8,7 @@ import { colors } from '@/constants/theme';
 export default function ProfileScreen() {
   const { data: profile } = useProfile();
   const updateProfile = useUpdateProfile();
+  const isSaving = updateProfile.status === "pending";
   const [fullName, setFullName] = React.useState(profile?.full_name ?? '');
 
   React.useEffect(() => {
@@ -51,7 +52,7 @@ export default function ProfileScreen() {
           className="border border-border rounded-2xl px-4 py-3"
           placeholderTextColor={colors.iconMuted}
         />
-        <Button label="Сохранить" onPress={handleSave} loading={updateProfile.isLoading} />
+        <Button label="Сохранить" onPress={handleSave} disabled={isSaving} loading={isSaving} />
       </View>
 
       <View className="bg-surface rounded-3xl p-4 gap-3">

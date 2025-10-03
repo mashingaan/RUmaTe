@@ -1,6 +1,7 @@
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { OnboardingForm } from '@/lib/validation';
 
 interface OnboardingState {
@@ -22,14 +23,7 @@ export const useOnboardingStore = create<OnboardingState>()(
     }),
     {
       name: 'onboarding',
-      storage: {
-        getItem: async (name) => {
-          const value = await AsyncStorage.getItem(name);
-          return value ?? null;
-        },
-        setItem: (name, value) => AsyncStorage.setItem(name, value),
-        removeItem: (name) => AsyncStorage.removeItem(name)
-      }
+      storage: createJSONStorage(() => AsyncStorage)
     }
   )
 );

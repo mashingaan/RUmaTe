@@ -21,6 +21,7 @@ export default function MessagesScreen() {
   const activeThreadId = selectedThreadId ?? threads?.[0]?.id;
   const messagesQuery = useMessages(activeThreadId ?? '');
   const sendMessage = useSendMessage(activeThreadId ?? '');
+  const isSending = sendMessage.status === 'pending';
   const [text, setText] = useState('');
 
   const handleSend = () => {
@@ -112,8 +113,8 @@ export default function MessagesScreen() {
             label="Отправить"
             variant="primary"
             onPress={handleSend}
-            disabled={!text}
-            loading={sendMessage.isLoading}
+            disabled={!text || isSending}
+            loading={isSending}
           />
         </View>
       </View>

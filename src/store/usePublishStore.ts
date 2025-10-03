@@ -1,6 +1,7 @@
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { PublishConditionsForm, PublishDetailsForm } from '@/lib/validation';
 
 interface PublishState {
@@ -15,7 +16,7 @@ interface PublishState {
   reset: () => void;
 }
 
-const initialState = {
+const initialState: Omit<PublishState, 'setStep' | 'setDetails' | 'setConditions' | 'setImages' | 'reset'> = {
   step: 0,
   details: {},
   images: [],
@@ -35,11 +36,7 @@ export const usePublishStore = create<PublishState>()(
     }),
     {
       name: 'publish-store',
-      storage: {
-        getItem: AsyncStorage.getItem,
-        setItem: (name, value) => AsyncStorage.setItem(name, value ?? ''),
-        removeItem: AsyncStorage.removeItem
-      }
+      storage: createJSONStorage(() => AsyncStorage)
     }
   )
 );
