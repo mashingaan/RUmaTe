@@ -13,7 +13,6 @@
     ]
   },
   "include": [
-    "expo-env.d.ts",
     "src",
     "test"
   ],
