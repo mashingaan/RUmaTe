@@ -1,123 +1,68 @@
-import React, { useState } from 'react';
-import { FlatList, Text, TextInput, View } from 'react-native';
-import { useThreads, useMessages, useSendMessage } from '@/hooks/useThreads';
-import { EmptyState } from '@/components/EmptyState';
-import { Skeleton } from '@/components/Skeleton';
-import { Button } from '@/components/Button';
-import { Chip } from '@/components/Chip';
-import { useAuth } from '@/hooks/useAuth';
-import { messageSchema } from '@/lib/validation';
-
-const quickReplies = [
-  'Здравствуйте! Готов(а) подъехать сегодня в 18:00.',
-  'Добрый день! Подскажите, свободна ли комната?',
-  'Привет! Можно обсудить детали проживания?'
-];
+import React from 'react';
+import { ScrollView, View, Text, Image, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { colors, typography } from '@/constants/theme';
+import { mockChats, getProfileByChat } from '@/data/mockChats';
+import { mockProfiles } from '@/data/mockProfiles';
 
 export default function MessagesScreen() {
-  const { data: threads, isLoading: threadsLoading, isError, refetch } = useThreads();
-  const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
-  const { session } = useAuth();
-  const activeThreadId = selectedThreadId ?? threads?.[0]?.id;
-  const messagesQuery = useMessages(activeThreadId ?? '');
-  const sendMessage = useSendMessage(activeThreadId ?? '');
-  const isSending = sendMessage.status === 'pending';
-  const [text, setText] = useState('');
-
-  const handleSend = () => {
-    const parsed = messageSchema.safeParse({ text });
-    if (!parsed.success || !activeThreadId || !session?.user) return;
-    sendMessage.mutate({ text: parsed.data.text, sender_id: session.user.id });
-    setText('');
-  };
+  const router = useRouter();
 
   return (
-    <View className="flex-1 bg-bg">
-      <View className="px-4 pt-4 pb-2">
-        <Text className="text-2xl font-semibold text-text">Сообщения</Text>
+    <ScrollView className="flex-1 bg-bg" contentContainerStyle={{ padding: 24, gap: 24 }}>
+      <View className="flex-row justify-between items-center">
+        <Text style={[typography.h1, { color: colors.text }]}>Чаты</Text>
+        <Text className="text-sm text-primary">32 симпатии</Text>
       </View>
-      {threadsLoading && (
-        <View className="px-4 gap-4">
-          {[...Array(3)].map((_, index) => (
-            <Skeleton key={index} height={72} />
+
+      <View className="gap-3">
+        <Text className="text-sm font-semibold text-text-muted">Взаимные симпатии</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 16 }}>
+          {mockProfiles.slice(0, 6).map((profile) => (
+            <TouchableOpacity
+              key={profile.id}
+              onPress={() => router.push(`/profiles/${profile.id}`)}
+              className="items-center gap-2"
+              accessibilityRole="button"
+            >
+              <Image source={profile.avatar} className="w-16 h-16 rounded-full" />
+              <Text className="text-xs text-text" numberOfLines={1}>
+                {profile.name.split(' ')[0]}
+              </Text>
+            </TouchableOpacity>
           ))}
-        </View>
-      )}
-      {!threadsLoading && !threads?.length && (
-        <EmptyState
-          title="Чаты появятся здесь"
-          description="Свяжитесь с хозяином комнаты, чтобы продолжить диалог"
-        />
-      )}
-      <FlatList
-        horizontal
-        data={threads ?? []}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Chip
-            label={item.listing_title ?? 'Объявление'}
-            selected={item.id === activeThreadId}
-            onPress={() => setSelectedThreadId(item.id)}
-          />
-        )}
-        contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}
-        style={{ maxHeight: 56, paddingVertical: 8 }}
-        showsHorizontalScrollIndicator={false}
-      />
-      <View className="flex-1 px-4">
-        {isError && (
-          <EmptyState
-            title="Не удалось загрузить сообщения"
-            actionLabel="Повторить"
-            onActionPress={() => void refetch()}
-          />
-        )}
-        {!isError && (
-          <FlatList
-            data={messagesQuery.data ?? []}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View
-                className={`max-w-[80%] rounded-2xl px-4 py-3 my-2 ${
-                  item.sender_id === session?.user?.id ? 'self-end bg-primary' : 'self-start bg-surface'
-                }`}
+        </ScrollView>
+      </View>
+
+      <View className="bg-surface rounded-4xl">
+        {mockChats.map((chat, index) => {
+          const partner = getProfileByChat(chat);
+          return (
+            <View key={chat.id}>
+              <TouchableOpacity
+                className="flex-row items-center gap-4 px-4 py-4"
+                onPress={() => router.push(`/messages/${chat.id}`)}
+                accessibilityRole="button"
               >
-                <Text className={item.sender_id === session?.user?.id ? 'text-white' : 'text-text'}>
-                  {item.text}
-                </Text>
-              </View>
-            )}
-            contentContainerStyle={{ paddingVertical: 16, gap: 4 }}
-          />
-        )}
+                <Image source={partner?.avatar ?? { uri: 'https://source.boringavatars.com/marble/256/default' }} className="w-14 h-14 rounded-full" />
+                <View className="flex-1">
+                  <View className="flex-row justify-between items-center">
+                    <Text className="text-base font-semibold text-text">{partner?.name ?? 'Собеседник'}</Text>
+                    <Text className="text-xs text-text-muted">{chat.time}</Text>
+                  </View>
+                  <View className="flex-row justify-between items-center mt-1">
+                    <Text className="text-sm text-text-muted flex-1" numberOfLines={2}>
+                      {chat.preview}
+                    </Text>
+                    {chat.unread && <View className="w-2.5 h-2.5 rounded-full bg-primary ml-2" />}
+                  </View>
+                </View>
+              </TouchableOpacity>
+              {index < mockChats.length - 1 && <View className="h-px bg-border ml-24" />}
+            </View>
+          );
+        })}
       </View>
-      <View className="px-4 pb-6 gap-3">
-        <FlatList
-          horizontal
-          data={quickReplies}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <Chip label={item} onPress={() => setText(item)} />
-          )}
-          contentContainerStyle={{ gap: 8 }}
-          showsHorizontalScrollIndicator={false}
-        />
-        <View className="bg-surface rounded-3xl border border-border px-4 py-3 flex-row items-center gap-3">
-          <TextInput
-            placeholder="Сообщение"
-            value={text}
-            onChangeText={setText}
-            style={{ flex: 1 }}
-          />
-          <Button
-            label="Отправить"
-            variant="primary"
-            onPress={handleSend}
-            disabled={!text || isSending}
-            loading={isSending}
-          />
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 }

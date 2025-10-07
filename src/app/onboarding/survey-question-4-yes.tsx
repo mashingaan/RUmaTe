@@ -22,7 +22,11 @@ export default function SurveyQuestionFourYesScreen() {
         />
       </View>
       <View className="gap-3">
-        <Button label="Следующий вопрос" onPress={() => router.push('/home')} disabled={!link} />
+        <Button
+          label="Следующий вопрос"
+          onPress={() => router.push('/onboarding/survey-question-5')}
+          disabled={!link}
+        />
         <Button label="Предыдущий вопрос" variant="outline" onPress={() => router.back()} />
       </View>
     </View>

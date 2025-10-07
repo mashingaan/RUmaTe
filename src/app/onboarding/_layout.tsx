@@ -21,6 +21,10 @@ export default function OnboardingLayout() {
       <Stack.Screen name="survey-question-3" options={{ title: 'Вопрос 3', headerShown: false }} />
       <Stack.Screen name="survey-question-4" options={{ title: 'Вопрос 4', headerShown: false }} />
       <Stack.Screen name="survey-question-4-yes" options={{ title: 'Ответ "Да" на вопрос 4', headerShown: false }} />
+      <Stack.Screen name="survey-question-5" options={{ title: 'Вопрос 5', headerShown: false }} />
+      <Stack.Screen name="survey-question-6" options={{ title: 'Вопрос 6', headerShown: false }} />
+      <Stack.Screen name="survey-question-7" options={{ title: 'Вопрос 7', headerShown: false }} />
+      <Stack.Screen name="survey-question-8" options={{ title: 'Вопрос 8', headerShown: false }} />
     </Stack>
   );
 }

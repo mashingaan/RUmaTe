@@ -5,8 +5,8 @@ describe('calculateCompatibility', () => {
     const prefs = {
       cleanliness: 'mid',
       pets: 'ok',
-      smoking: 'no',
-      alcohol: 'social',
+      smoking: 'neutral',
+      alcohol: 'neutral',
       sleep: 'flex'
     } as const;
     expect(calculateCompatibility(prefs, prefs)).toBe(100);
@@ -16,15 +16,15 @@ describe('calculateCompatibility', () => {
     const a = {
       cleanliness: 'high',
       pets: 'no',
-      smoking: 'no',
-      alcohol: 'rare',
+      smoking: 'negative',
+      alcohol: 'negative',
       sleep: 'early'
     } as const;
     const b = {
       cleanliness: 'low',
-      pets: 'dog',
-      smoking: 'yes',
-      alcohol: 'social',
+      pets: 'has',
+      smoking: 'positive',
+      alcohol: 'positive',
       sleep: 'late'
     } as const;
     expect(calculateCompatibility(a, b)).toBeLessThan(60);

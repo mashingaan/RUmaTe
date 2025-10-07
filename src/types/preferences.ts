@@ -1,7 +1,7 @@
 export type Preference = {
   cleanliness?: 'low' | 'mid' | 'high';
-  pets?: 'no' | 'cat' | 'dog' | 'ok';
-  smoking?: 'no' | 'outside' | 'yes';
-  alcohol?: 'no' | 'rare' | 'social';
+  pets?: 'ok' | 'has' | 'no';
+  smoking?: 'neutral' | 'positive' | 'negative';
+  alcohol?: 'neutral' | 'positive' | 'negative';
   sleep?: 'early' | 'flex' | 'late';
 };

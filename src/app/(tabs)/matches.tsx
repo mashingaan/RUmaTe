@@ -1,53 +1,63 @@
-import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import { useMatches } from '@/hooks/useMatches';
-import { useProfile } from '@/hooks/useProfile';
-import { PreferenceChips } from '@/components/PreferenceChips';
-import { ListingCard } from '@/components/ListingCard';
-import { Skeleton } from '@/components/Skeleton';
-import { EmptyState } from '@/components/EmptyState';
+﻿import React from 'react';
+import { ScrollView, View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { BadgeCheck, Filter, Sparkles } from 'lucide-react-native';
+import { colors, typography } from '@/constants/theme';
+import { mockProfiles } from '@/data/mockProfiles';
+
+const overlayColors = ['rgba(75,48,255,0.55)', 'rgba(49,32,210,0.55)', 'rgba(80,48,255,0.55)'];
 
 export default function MatchesScreen() {
-  const { data: profile, isLoading: profileLoading } = useProfile();
-  const { data, isLoading, isError, refetch } = useMatches();
+  const router = useRouter();
 
   return (
-    <ScrollView className="flex-1 bg-bg" contentContainerStyle={{ paddingBottom: 120 }}>
-      <View className="px-4 pt-4 pb-6 gap-4">
-        <Text className="text-2xl font-semibold text-text">Совместимость</Text>
-        {profileLoading ? (
-          <Skeleton height={80} />
-        ) : (
-          <View className="bg-surface rounded-2xl p-4 gap-3">
-            <Text className="text-lg font-semibold text-text">{profile?.full_name ?? 'Гость'}</Text>
-            <PreferenceChips preferences={profile?.preferences} />
-          </View>
-        )}
-        {isLoading && (
-          <View className="gap-4">
-            {[...Array(2)].map((_, index) => (
-              <Skeleton key={index} height={220} />
-            ))}
-          </View>
-        )}
-        {!isLoading && data?.length ? (
-          data.map((match) => (
-            <ListingCard key={match.id} listing={match.listing} />
-          ))
-        ) : null}
-        {!isLoading && !isError && !data?.length && (
-          <EmptyState
-            title="Матчей пока нет"
-            description="Пройдите опрос по предпочтениям, чтобы получать точные рекомендации"
-          />
-        )}
-        {isError && (
-          <EmptyState
-            title="Не удалось получить матчи"
-            actionLabel="Обновить"
-            onActionPress={() => void refetch()}
-          />
-        )}
+    <ScrollView className="flex-1 bg-bg px-5 pt-6">
+      <View className="flex-row justify-between items-center mb-6">
+        <Text style={[typography.h1, { color: colors.text }]}>Анкеты</Text>
+        <TouchableOpacity className="w-10 h-10 rounded-full bg-primary-soft items-center justify-center">
+          <Filter color={colors.primary} size={20} />
+        </TouchableOpacity>
+      </View>
+      <View className="flex-row flex-wrap gap-4 justify-between pb-12">
+        {mockProfiles.map((profile, index) => (
+          <TouchableOpacity
+            key={profile.id}
+            onPress={() => router.push(`/profiles/${profile.id}`)}
+            className="w-[48%] h-60 rounded-3xl overflow-hidden"
+            activeOpacity={0.9}
+          >
+            <ImageBackground
+              source={profile.cover}
+              imageStyle={{ borderRadius: 24 }}
+              style={{ flex: 1, padding: 16, justifyContent: 'space-between' }}
+            >
+              <View style={[StyleSheet.absoluteFill, { backgroundColor: overlayColors[index % overlayColors.length] }]} />
+              <View className="justify-between flex-1">
+                <View className="flex-row items-center justify-between">
+                  <Text className="text-white text-sm font-semibold">{profile.match}% Match</Text>
+                  <Sparkles color="white" size={18} />
+                </View>
+                <View>
+                  <View className="flex-row items-center gap-2">
+                    <Text className="text-white text-xl font-semibold shrink">{profile.name}</Text>
+                    {profile.verified && <BadgeCheck color="#fff" size={18} />}
+                  </View>
+                  <Text className="text-white/90 text-sm mt-1">{profile.role}</Text>
+                  <View className="flex-row flex-wrap gap-2 mt-3">
+                    {profile.tags.slice(0, 3).map((tag) => (
+                      <Text
+                        key={tag}
+                        className="text-xs text-white px-3 py-1 rounded-full bg-white/15"
+                      >
+                        {tag}
+                      </Text>
+                    ))}
+                  </View>
+                </View>
+              </View>
+            </ImageBackground>
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   );
