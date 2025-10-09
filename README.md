@@ -4,7 +4,7 @@
 
 ## Стек
 
-- **Expo React Native (SDK 51)** — мобильный фронтенд (TypeScript, Expo Router, React Navigation)
+- **Expo React Native (SDK 54)** — мобильный фронтенд (TypeScript, Expo Router, React Navigation)
 - **NativeWind + Tailwind** — дизайн-система и темизация
 - **Zustand + TanStack Query** — состояние и загрузка данных
 - **Supabase** — Postgres, Auth, Storage, Realtime
